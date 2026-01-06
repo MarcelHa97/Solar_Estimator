@@ -1,0 +1,23 @@
+{
+    "name": "Solar_Estimator",
+    "shutdownAction": "none",
+
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+
+    "runArgs": [
+        "-e NVIDIA_DRIVER_CAPABILITIES=all",
+        "--runtime=nvidia",
+        "--shm-size=80gb"
+    ],
+
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "dev.containers.mountWaylandSocket": false,
+                "python.languageServer": "Pylance"
+            }
+        }
+    }
+}
