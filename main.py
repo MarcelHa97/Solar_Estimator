@@ -114,8 +114,8 @@ mc = modelchain.ModelChain(system, loc, aoi_model='physical',
                            spectral_model='no_loss')
 
 #print(times)
-weather = loc.get_clearsky(times)
-df.to_csv("output.txt", sep="\t", index=False)
+#weather = loc.get_clearsky(times)
+#df.to_csv("output.txt", sep="\t", index=False)
 
 mc.run_model(df)
 

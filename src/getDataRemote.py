@@ -15,6 +15,7 @@ class GetWeatherData:
         self.url = url
         self.station_ids = station_ids
         
+        
     def downloadData(self, station_id):
         if station_id in self.station_ids:
             print("Station ID is correct!")
@@ -38,6 +39,7 @@ class GetWeatherData:
 
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_to)
+
 
     def loadData(self, station_id, start_time = "2025-11-22 06:00", end_time = "2025-11-22 17:00", hourly_data = False, data_type = "GS_10"):
         dir_name = '10minutenwerte_SOLAR_' + str(station_id).zfill(5)
