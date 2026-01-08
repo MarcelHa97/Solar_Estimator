@@ -1,0 +1,5 @@
+weather_data:
+  url: 'https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/solar/recent/'
+  tz: 'Etc/GMT'
+
+station_ids: [232, 691, 2522, 1262]

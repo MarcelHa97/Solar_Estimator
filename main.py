@@ -5,23 +5,30 @@ import pandas as pd
 from pvlib import pvsystem, modelchain, location, solarposition
 import numpy as np
 
+import yaml
+
+# Open config file for data accistion
+with open('data/configs/config.yaml', 'r') as file:
+    config_file = yaml.safe_load(file)
+
 # Define source paths
 # Define parameters for calculation
 latitude=48.3705
 longitude=10.8978
 
-url = 'https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/solar/recent/'
+#url = 'https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/solar/recent/'
 name = '10minutenwerte_SOLAR_00232_akt.zip' 
 
-start_time = '2024-06-21 03:00'
-end_time = '2024-06-21 21:00'
+start_time = '2025-06-21 04:00'
+end_time = '2025-06-21 21:00'
 tz = 'Etc/GMT'
 
-data = GetWeatherData()
+data = GetWeatherData(url=config_file['weather_data']['url'], 
+                      station_ids=config_file['station_ids'])
 
 print("Download data")
-#data.downloadData(232)
-times, gs_values, ds_values = data.loadData(232, start_time=start_time, end_time=end_time)
+data.downloadData(station_id=232)
+times, gs_values, ds_values = data.loadData(station_id=232, start_time=start_time, end_time=end_time)
 times_clock = times.dt.strftime("%H:%M")
 #print(times_clock.shape)
 
