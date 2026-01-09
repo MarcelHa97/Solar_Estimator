@@ -32,7 +32,29 @@ class GetSolarPower:
             tz=time_zone
         )
 
-    def setSolarArraySystem(self, panel_orientation=None, names=None, modules_per_string=None, strings=None):
+    def setSolarArraySystem(self, panel_orientation=None, names=None, 
+                            modules_per_string=None, strings=None):
+        """
+        Configure the solar array system definition.
+
+        Args:
+            panel_orientation (list[list[float]], optional):
+                Each element must be [tilt, azimuth].
+                Example: [[30, 270], [30, 90]]
+            names (list[str], optional):
+                Human readable array names.
+            modules_per_string (list[int], optional):
+                Number of modules per string for each array.
+            strings (list[int], optional):
+                Number of strings for each array.
+
+        Raises:
+            TypeError: If input types are incorrect.
+            ValueError: If lists are not equal length or values invalid.
+
+        Returns:
+            None
+        """
 
         # set default values if required 
         if panel_orientation is None:
