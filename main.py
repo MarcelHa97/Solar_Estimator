@@ -1,4 +1,6 @@
 from src.getDataRemote import GetWeatherData
+from src.getSolarPower import GetSolarPower
+
 import matplotlib.pyplot as plt
 
 import pandas as pd
@@ -26,13 +28,15 @@ tz = 'Etc/GMT'
 data = GetWeatherData(url=config_file['weather_data']['url'], 
                       station_ids=config_file['station_ids'])
 
+# Download new if this is required, dependent if new data is available
+# Data is only downloaded for specific station id 
+
 print("Download data")
 data.downloadData(station_id=232)
 times, gs_values, ds_values = data.loadData(station_id=232, start_time=start_time, end_time=end_time)
 times_clock = times.dt.strftime("%H:%M")
-#print(times_clock.shape)
 
-
+# Plot measure global irradiance over time
 plt.figure(figsize=(10,5))
 plt.plot(times_clock, gs_values, marker="o", linestyle="-")
 
@@ -89,7 +93,11 @@ df = pd.DataFrame({
 # reorder columns
 df = df[['ghi', 'dni', 'dhi']]
 
-#print(df)
+# Define solar array system for evaluation
+solarSystem = GetSolarPower(latitude=48, longitude=10, tz=tz)
+solarSystem.setSolarArraySystem()
+
+# Define solar array system
 
 array_kwargs = dict(
     module_parameters=dict(pdc0=1, gamma_pdc=-0.004),
