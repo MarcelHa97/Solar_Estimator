@@ -21,8 +21,8 @@ longitude=10.8978
 #url = 'https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/10_minutes/solar/recent/'
 name = '10minutenwerte_SOLAR_00232_akt.zip' 
 
-start_time = '2025-06-21 04:00'
-end_time = '2025-06-21 21:00'
+start_time = '2026-01-21 05:00'             #'2026-01-21 04:00'
+end_time = '2026-01-21 21:00'               #'2026-01-21 21:00' 
 tz = 'Etc/GMT'
 
 data = GetWeatherData(url=config_file['weather_data']['url'], 
@@ -57,6 +57,8 @@ solar_position = solarposition.get_solarposition(
     latitude,
     longitude
 )
+
+print(solar_position)
 
 zenith = solar_position['zenith']
 zenith[zenith > 85] = 85
@@ -99,27 +101,29 @@ solarSystem.setSolarArraySystem()
 
 # Define solar array system
 
-array_kwargs = dict(
-    module_parameters=dict(pdc0=1, gamma_pdc=-0.004),
-    temperature_model_parameters=dict(a=-3.56, b=-0.075, deltaT=3)
-)
+#array_kwargs = dict(
+#    module_parameters=dict(pdc0=1, gamma_pdc=-0.004),
+#    temperature_model_parameters=dict(a=-3.56, b=-0.075, deltaT=3)
+#)
 
-arrays = [
-    pvsystem.Array(pvsystem.FixedMount(30, 270), name='West-Facing Array',              
-                   **array_kwargs),
-    pvsystem.Array(pvsystem.FixedMount(30, 90), name='East-Facing Array',
-                   **array_kwargs),
-]
+#arrays = [
+#    pvsystem.Array(pvsystem.FixedMount(30, 270), name='West-Facing Array',              
+#                   **array_kwargs),
+#    pvsystem.Array(pvsystem.FixedMount(30, 90), name='East-Facing Array',
+#                   **array_kwargs),
+#]
 #loc = location.Location(40, -80)
-loc = location.Location(
-    latitude=48,
-    longitude=10,
-    tz=tz
-)
+#loc = location.Location(
+#    latitude=48,
+#    longitude=10,
+#    tz=tz
+#)
 
-system = pvsystem.PVSystem(arrays=arrays, inverter_parameters=dict(pdc0=3))
-mc = modelchain.ModelChain(system, loc, aoi_model='physical',
-                           spectral_model='no_loss')
+#system = pvsystem.PVSystem(arrays=arrays, inverter_parameters=dict(pdc0=3))
+#mc = modelchain.ModelChain(system, loc, aoi_model='physical',
+#                           spectral_model='no_loss')
+
+mc = solarSystem.runSolarSystem()
 
 #print(times)
 #weather = loc.get_clearsky(times)
@@ -128,7 +132,7 @@ mc = modelchain.ModelChain(system, loc, aoi_model='physical',
 mc.run_model(df)
 
 fig, ax = plt.subplots()
-for array, pdc in zip(system.arrays, mc.results.dc):
+for array, pdc in zip(solarSystem.solar_array, mc.results.dc):
     pdc.plot(label=f'{array.name}')
 #(mc.results.dc[0]).plot(label='Test')
 mc.results.ac.plot(label='Inverter')
